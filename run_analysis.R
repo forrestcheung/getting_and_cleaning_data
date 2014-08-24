@@ -76,12 +76,14 @@ run_analysis<-function(){
     BigTable2<-NULL;
   }  
   BigTable
+  
+  #step 5  Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+  library(reshape2)
+  BigTable_Melt <- melt(BigTable,id=c("subject_identifier", "activity_code", "activity_desc"))
+#   head(BigTable_Melt)
+#   tail(BigTable_Melt)
+  result <- dcast(BigTable_Melt, subject_identifier+activity_code+activity_desc~variable, mean)
+  write.table(result, file="step5result.txt",row.name=FALSE)
 }
 
-#step 5
-library(reshape2)
-BigTable_Melt <- melt(BigTable,id=c("subject_identifier", "activity_code", "activity_desc"))
-head(BigTable_Melt)
-tail(BigTable_Melt)
-result <- dcast(BigTable_Melt, subject_identifier+activity_code+activity_desc~variable, mean)
-write.table(result, file="step5result.txt",row.name=FALSE)
+
